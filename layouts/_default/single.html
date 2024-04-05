@@ -1,0 +1,31 @@
+
+{{ define "main" }}
+
+  {{ $url := "https://raw.githubusercontent.com/grafana/grafana/main/public/openapi3.json" }}
+  {{ $api := "" }}
+  {{ with resources.GetRemote $url }}
+    {{ with .Err }}
+      {{ errorf "%s" . }}
+    {{ else }}
+      {{ $api = . | openapi3.Unmarshal }}
+
+      {{ range $path, $details := $api.Paths }}
+        <p>{{ $path }}</p>
+        <dl>
+          {{ with $details.Get }}
+            <dt>GET</dt>
+            <dd>{{ .Summary }}</dd>
+          {{ end }}
+          {{ with $details.Post }}
+            <dt>POST</dt>
+            <dd>{{ .Summary }}</dd>
+          {{ end }}
+        </dl>
+      {{ end }}
+
+    {{ end }}
+  {{ else }}
+    {{ errorf "Unable to get remote resource %q" $url }}
+  {{ end }}
+
+{{ end }}

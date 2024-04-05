@@ -1,0 +1,2 @@
+
+# Hugo OpenAPI test
