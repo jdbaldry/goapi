@@ -9,7 +9,7 @@
     {{ else }}
       {{ $api = . | openapi3.Unmarshal }}
 
-      {{ range $path, $details := $api.Paths }}
+      {{ range $path, $details := $api.Paths.Extensions }}
         <p>{{ $path }}</p>
         <dl>
           {{ with $details.Get }}
